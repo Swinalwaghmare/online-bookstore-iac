@@ -9,4 +9,12 @@ resource "aws_instance" "bastion" {
   tags = {
     Name = "bastion"
   }
+  depends_on = [ var.depends_aws_db_instance_name ]
+  user_data = templatefile("${path.module}/rds-data.sh",{
+    DB_HOST = var.db_instance_address
+    DB_USER = var.db_user_name
+    DB_PASS = var.db_password
+  })
+
+  user_data_replace_on_change = true
 }
