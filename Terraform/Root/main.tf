@@ -55,4 +55,21 @@ module "bastion_creation" {
     key_name = "spider"
     subnet_id = module.vpc_creation.subnet_1
     bastion_security = module.sg_creation.bastion_host_sg
+    
+    depends_aws_db_instance_name = module.RDS_creation.rds_name
+    db_instance_address = module.RDS_creation.rds_endpoint
+    db_user_name = var.username
+    db_password = var.password
+
+}
+
+module "RDS_creation" {
+    source = "../Module/RDS"
+
+    db_subnet_name = "main"
+    subnet_ids = [module.vpc_creation.RDS_Subnet_1, module.vpc_creation.RDS_Subnet_2]
+
+    username = var.username
+    password = var.password
+    db_sg = [module.sg_creation.RDS_sg]
 }
