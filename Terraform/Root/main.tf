@@ -40,3 +40,19 @@ module "vpc_creation" {
     aws_nat_tag = "dev_nat"
     private_rt_table = "dev-private-rt"
 }
+
+module "sg_creation" {
+    source = "../Module/Security Group"
+    aws_vpc_name = module.vpc_creation.vpc_name
+    aws_vpc_id = module.vpc_creation.vpc_id
+    my_ip = var.my_ip
+}
+
+module "bastion_creation" {
+    source = "../Module/Bastion"
+    ami = "ami-0fa3fe0fa7920f68e"
+    instance_type = "t2.micro"
+    key_name = "spider"
+    subnet_id = module.vpc_creation.subnet_1
+    bastion_security = module.sg_creation.bastion_host_sg
+}
