@@ -22,3 +22,25 @@ resource "aws_security_group" "bastion-host" {
     }
 }
 
+resource "aws_security_group" "RDS_SG" {
+    description = "Allow Backend to Connect with RDS"
+    vpc_id = var.aws_vpc_id
+    depends_on = [ var.aws_vpc_name ]
+
+    ingress {
+        from_port = 22
+        to_port = 22
+        protocol = "tcp"
+        security_groups = [aws_security_group.bastion-host.id]
+    }
+
+    egress {
+        from_port = 0
+        to_port = 0
+        protocol = "-1"
+        cidr_blocks = ["0.0.0.0/0"]
+    }
+    tags = {
+      Name = "RDS-SG"
+    }
+}
