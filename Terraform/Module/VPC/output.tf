@@ -10,3 +10,10 @@ output "subnet_1" {
   value = aws_subnet.public-1.id
 }
 
+output "RDS_Subnet_1" {
+  value = aws_subnet.private-5.id
+}
+
+output "RDS_Subnet_2" {
+  value = aws_subnet.private-6.id
+}
